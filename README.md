@@ -9,6 +9,7 @@ based on log(n) cost to calculate power of matrix
 Setup service: 
 to run service you have to install docker-compose on your comp
 firstly adapt your env in docker-compose.override.yml and .env
+
 now build and run containers (php and nginx)
   - docker-compose up -d --build --remove-orphans
 
