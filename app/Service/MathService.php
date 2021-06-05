@@ -7,7 +7,7 @@ namespace App\Service;
 use ArithmeticError;
 use GMP;
 
-class MathService
+class MathService implements MathServiceInterface
 {
 
     /**
@@ -17,7 +17,7 @@ class MathService
 
     public function __construct()
     {
-        $this->tribonacciBasedArray= [
+        $this->tribonacciBasedArray = [
             [gmp_init(1), gmp_init(1), gmp_init(1)],
             [gmp_init(1), gmp_init(0), gmp_init(0)],
             [gmp_init(0), gmp_init(1), gmp_init(0)],
@@ -25,6 +25,11 @@ class MathService
     }
 
 
+    /**
+     * function to calculate tribonacci number
+     * @param int $number
+     * @return GMP
+     */
     public function tribonacci(int $number): GMP
     {
         if ($number < 0) {
@@ -36,23 +41,34 @@ class MathService
         if ($number == 2) {
             return gmp_init(1);
         }
-        $tribonacciPowerArray = $this->recursivePower($this->tribonacciBasedArray, $number - 2);
+        /**  get based matrix power n-2 */
+        $tribonacciPowerArray = $this->recursivePowerMatrix($this->tribonacciBasedArray, $number - 2);
+        /**  return (0,0) element */
         return $tribonacciPowerArray[0][0];
     }
 
-    public function recursivePower(array $a, int $power): array
+    /**
+     * function to calculate power of Matrox recursive
+     * @param array $a
+     * @param int $power
+     * @return array|GMP[][]
+     */
+    public function recursivePowerMatrix(array $a, int $power): array
     {
         if ($power < 1) {
             throw new ArithmeticError("Unsupported power operation");
         }
-        if ($power == 1)
+        if ($power == 1){
             return $a;
+        }
 
+        /**  get power/2 matrix */
+        $return = $this->recursivePowerMatrix($a, $power / 2);
 
-        $return = $this->recursivePower($a, $power / 2);
-
+        /**  multiply 2  power/2 matrix */
         $return = $this->multiplyTow3x3Arrays($return, $return);
 
+        /**  add one additional multiple for ood power */
         if ($power % 2) {
             $return = $this->multiplyTow3x3Arrays($return, $a);
         }
@@ -61,6 +77,7 @@ class MathService
     }
 
     /**
+     * function to multiply 2 3*3 arrays
      * @param array $a
      * @param array $b
      * @return GMP[][]
@@ -109,6 +126,7 @@ class MathService
     }
 
     /**
+     * function to multiply 2 vector 3*1 and 1*3
      * @param array $a
      * @param array $b
      * @return GMP
@@ -132,6 +150,6 @@ class MathService
                 throw new ArithmeticError("The column $key of second array is not number GMP");
             }
         }
-        return gmp_add(gmp_mul($a[0],$b[0]),gmp_add(gmp_mul($a[1],$b[1]),gmp_mul($a[2],$b[2])));
+        return gmp_add(gmp_mul($a[0], $b[0]), gmp_add(gmp_mul($a[1], $b[1]), gmp_mul($a[2], $b[2])));
     }
 }

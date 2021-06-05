@@ -166,13 +166,13 @@ class MathTest extends TestCase
             [1, 1, 1],
             [1, 0, 0]
         ];
-        $gmpResult = $this->mathService->recursivePower($a, 1);
+        $gmpResult = $this->mathService->recursivePowerMatrix($a, 1);
         foreach ($gmpResult as $col => $items) {
             foreach ($items as $row => $item) {
                 $this->assertEquals(gmp_intval($a[$col][$row]), gmp_intval($item));
             }
         }
-        $gmpResult2 = $this->mathService->recursivePower($a, 2);
+        $gmpResult2 = $this->mathService->recursivePowerMatrix($a, 2);
         foreach ($gmpResult2 as $col => $items) {
             foreach ($items as $row => $item) {
                 $this->assertEquals($result[$col][$row], gmp_intval($item));
@@ -190,7 +190,7 @@ class MathTest extends TestCase
         ];
         $this->expectException(ArithmeticError::class);
         $this->expectExceptionMessage("Unsupported power operation");
-        $this->mathService->recursivePower($a, -1);
+        $this->mathService->recursivePowerMatrix($a, -1);
     }
 
     public function test_tribonacci()
