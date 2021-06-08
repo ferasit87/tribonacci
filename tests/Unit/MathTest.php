@@ -207,4 +207,11 @@ class MathTest extends TestCase
         $this->assertEquals(44, gmp_intval($this->mathService->tribonacci(9)));
         $this->assertEquals(81, gmp_intval($this->mathService->tribonacci(10)));
     }
+
+    public function test_exception_tribonacci()
+    {
+        $this->expectException(ArithmeticError::class);
+        $this->expectExceptionMessage("Unsupported tribonacci operation");
+        $this->mathService->tribonacci( -1);
+    }
 }
