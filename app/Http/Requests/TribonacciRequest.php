@@ -15,7 +15,7 @@ class TribonacciRequest extends FormRequest
     public function rules()
     {
         return [
-            'n' => 'required|integer|min:0'
+            'n' => 'required|integer|min:1'
         ];
     }
 }
