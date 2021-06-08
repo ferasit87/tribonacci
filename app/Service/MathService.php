@@ -141,6 +141,11 @@ class MathService implements MathServiceInterface
         return gmp_add(gmp_mul($a[0], $b[0]), gmp_add(gmp_mul($a[1], $b[1]), gmp_mul($a[2], $b[2])));
     }
 
+    /**
+     * function to reverse array around axe
+     * @param array $array
+     * @return array
+     */
     public function inverseAxe3x3Array(array $array): array
     {
         if (count($array) != 3) {
