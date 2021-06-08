@@ -212,6 +212,45 @@ class MathTest extends TestCase
     {
         $this->expectException(ArithmeticError::class);
         $this->expectExceptionMessage("Unsupported tribonacci operation");
-        $this->mathService->tribonacci( -1);
+        $this->mathService->tribonacci(-1);
+    }
+
+    public function test_first_exception_inverseAxe3x3Array()
+    {
+        $a = [
+           [1,1,1],
+           [1,1,1]
+        ];
+        $this->expectException(ArithmeticError::class);
+        $this->expectExceptionMessage("The array is not 3*3");
+        $this->mathService->inverseAxe3x3Array($a);
+    }
+
+    public function test_second_exception_inverseAxe3x3Array()
+    {
+        $a = [
+            [1, 1, 1],
+            [1],
+            [1,1]
+        ];
+        $this->expectException(ArithmeticError::class);
+        $this->expectExceptionMessage("The column 1 of the array not 3");
+        $this->mathService->inverseAxe3x3Array($a);
+    }
+
+    public function test_inverseAxe3x3Array()
+    {
+        $a = [
+            [1,1,1],
+            [1,0,0],
+            [0,1,0],
+        ];
+        $b = [
+            [1,1,0],
+            [1,0,1],
+            [1,0,0],
+        ];
+        $this->assertEquals($a,$this->mathService->inverseAxe3x3Array($b), "Default behaviour");
+        $this->assertEquals($a,$this->mathService->inverseAxe3x3Array($this->mathService->inverseAxe3x3Array($a)), "Default behaviour");
     }
 }

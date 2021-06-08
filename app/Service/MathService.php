@@ -58,7 +58,7 @@ class MathService implements MathServiceInterface
         if ($power < 1) {
             throw new ArithmeticError("Unsupported power operation");
         }
-        if ($power == 1){
+        if ($power == 1) {
             return $a;
         }
 
@@ -101,28 +101,16 @@ class MathService implements MathServiceInterface
                 throw new ArithmeticError("The column $key of second array not 3");
             }
         }
-        $BRows = [
-            [$b[0][0], $b[1][0], $b[2][0]],
-            [$b[0][1], $b[1][1], $b[2][1]],
-            [$b[0][2], $b[1][2], $b[2][2]],
-        ];
-        return [
-            [
-                $this->multipleCrossTow3x1vectors($a[0], $BRows[0]),
-                $this->multipleCrossTow3x1vectors($a[0], $BRows[1]),
-                $this->multipleCrossTow3x1vectors($a[0], $BRows[2]),
-            ],
-            [
-                $this->multipleCrossTow3x1vectors($a[1], $BRows[0]),
-                $this->multipleCrossTow3x1vectors($a[1], $BRows[1]),
-                $this->multipleCrossTow3x1vectors($a[1], $BRows[2]),
-            ],
-            [
-                $this->multipleCrossTow3x1vectors($a[2], $BRows[0]),
-                $this->multipleCrossTow3x1vectors($a[2], $BRows[1]),
-                $this->multipleCrossTow3x1vectors($a[2], $BRows[2]),
-            ],
-        ];
+        /** transform b Array */
+        $bInverse = $this->inverseAxe3x3Array($b);
+        /** multiply  $result */
+        $result = [];
+        foreach ($a as $colIndex => $col) {
+            foreach ($col as $rowIndex => $value) {
+                $result[$colIndex][$rowIndex] = $this->multipleCrossTow3x1vectors($col, $bInverse[$rowIndex]);
+            }
+        }
+        return $result;
     }
 
     /**
@@ -151,5 +139,24 @@ class MathService implements MathServiceInterface
             }
         }
         return gmp_add(gmp_mul($a[0], $b[0]), gmp_add(gmp_mul($a[1], $b[1]), gmp_mul($a[2], $b[2])));
+    }
+
+    public function inverseAxe3x3Array(array $array): array
+    {
+        if (count($array) != 3) {
+            throw new ArithmeticError("The array is not 3*3");
+        }
+        foreach ($array as $key => $item) {
+            if (count($item) != 3) {
+                throw new ArithmeticError("The column $key of the array not 3");
+            }
+        }
+        $return = [];
+        foreach ($array as $colIndex => $col) {
+            foreach ($col as $rowIndex => $value) {
+                $return[$rowIndex][$colIndex] = $value;
+            }
+        }
+        return $return;
     }
 }
